@@ -2,5 +2,6 @@
   <Folder Name="/src/">
     <Project Path="src/eAgenda.Aplicacao/eAgenda.Aplicacao.csproj" />
     <Project Path="src/eAgenda.Dominio/eAgenda.Dominio.csproj" />
+    <Project Path="src/eAgenda.WebApp/eAgenda.WebApp.csproj" />
   </Folder>
 </Solution>
