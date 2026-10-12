@@ -82,14 +82,25 @@ public sealed class CategoriaController(ServicoCategoria servicoCategoria) : Con
     }
 
     [HttpGet]
-    public ActionResult Excluir()
+    public ActionResult Excluir(Guid id)
     {
-        return View();
+        Result<CategoriaDto> resultado = servicoCategoria.SelecionarPorId(id);
+
+        if (resultado.IsFailed)
+            return RedirectToAction(nameof(Listar));
+
+        CategoriaDto dto = resultado.Value;
+
+        ExcluirCategoriaViewModel viewModel = new(dto.Id, dto.Titulo);
+
+        return View(viewModel);
     }
 
     [HttpPost]
-    public ActionResult Excluir(Guid id, EditarCategoriaViewModel viewModel)
+    public ActionResult Excluir(ExcluirCategoriaViewModel viewModel)
     {
+        servicoCategoria.Excluir(viewModel.Id);
+
         return RedirectToAction(nameof(Listar));
     }
 }
