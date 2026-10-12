@@ -39,14 +39,45 @@ public sealed class CategoriaController(ServicoCategoria servicoCategoria) : Con
     }
 
     [HttpGet]
-    public ActionResult Editar()
+    public ActionResult Editar(Guid id)
     {
-        return View();
+        Result<CategoriaDto> resultado = servicoCategoria.SelecionarPorId(id);
+
+        if (resultado.IsFailed)
+            return RedirectToAction(nameof(Listar));
+
+        CategoriaDto dto = resultado.Value;
+
+        EditarCategoriaViewModel editarVm = new EditarCategoriaViewModel(
+            dto.Id,
+            dto.Titulo
+        );
+
+        return View(editarVm);
     }
 
     [HttpPost]
     public ActionResult Editar(Guid id, EditarCategoriaViewModel viewModel)
     {
+        EditarCategoriaDto dto = new(
+            viewModel.Id,
+            viewModel.Titulo ?? string.Empty
+        );
+
+        Result resultado = servicoCategoria.Editar(dto);
+
+        if (resultado.IsFailed)
+        {
+            foreach (IError erro in resultado.Errors)
+            {
+                string campo = erro.Metadata["Campo"].ToString() ?? string.Empty;
+
+                ModelState.AddModelError(campo, erro.Message);
+            }
+
+            return View(viewModel);
+        }
+
         return RedirectToAction(nameof(Listar));
     }
 

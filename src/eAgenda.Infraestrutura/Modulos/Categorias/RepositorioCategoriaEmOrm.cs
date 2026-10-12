@@ -14,17 +14,21 @@ public sealed class RepositorioCategoriaEmOrm(eAgendaDbContext dbContext) : IRep
 
     public bool Editar(Guid idSelecionado, Categoria entidadeAtualizada)
     {
-        throw new NotImplementedException();
+        Categoria? categoria = SelecionarPorId(idSelecionado);
+
+        if (categoria == null)
+            return false;
+
+        categoria.Atualizar(entidadeAtualizada);
+
+        dbContext.SaveChanges();
+
+        return true;
     }
 
     public bool Excluir(Guid idSelecionado)
     {
         throw new NotImplementedException();
-    }
-
-    public bool ExisteCategoriaPorTitulo(string tituloCategoria, Guid? idIgnorado = null)
-    {
-        return dbContext.Categorias.Any(c => c.Id != idIgnorado && c.Titulo.ToLower() == tituloCategoria.ToLower());
     }
 
     public Categoria? SelecionarPorId(Guid idSelecionado)
@@ -37,5 +41,13 @@ public sealed class RepositorioCategoriaEmOrm(eAgendaDbContext dbContext) : IRep
         return dbContext.Categorias
             .OrderBy(c => c.Titulo)
             .ToList();
+    }
+
+    public bool ExisteCategoriaPorTitulo(string tituloCategoria, Guid? idIgnorado = null)
+    {
+        return dbContext.Categorias.Any(c =>
+            c.Id != idIgnorado &&
+            c.Titulo.ToLower() == tituloCategoria.ToLower()
+        );
     }
 }
