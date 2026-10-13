@@ -1,3 +1,4 @@
+using eAgenda.Dominio.Modulos.Despesas;
 using eAgenda.WebApp.Compartilhado.Dominio;
 
 namespace eAgenda.Dominio.Modulos.Categorias;
@@ -5,6 +6,7 @@ namespace eAgenda.Dominio.Modulos.Categorias;
 public sealed class Categoria : EntidadeBase<Categoria>
 {
     public string Titulo { get; set; } = string.Empty;
+    public List<Despesa> Despesas { get; set; } = [];
     public Categoria()
     { }
 
