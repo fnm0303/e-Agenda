@@ -25,15 +25,38 @@ public sealed class ServicoTarefa(IRepositorioTarefa repositorioTarefa)
         return Result.Ok(tarefa.Id);
     }
 
-    public Result<Guid> Editar(EditarTarefaDto dto)
+    public Result Editar(EditarTarefaDto dto)
     {
+        Tarefa tarefaAtualizada = new(dto.Titulo, dto.Prioridade);
+
+        List<ErroValidacao> erros = tarefaAtualizada.Validar();
+
+        if (erros.Count > 0)
+        {
+            List<Error> errosResultado = erros
+                .Select(e => new Error(e.Mensagem).WithMetadata("Campo", e.Campo)).ToList();
+
+            return Result.Fail(errosResultado);
+        }
+
+        bool conseguiuEditar = repositorioTarefa.Editar(dto.Id, tarefaAtualizada);
+
+        if (!conseguiuEditar)
+            return Result.Fail("Não foi possível editar a tarefa.");
+
         return Result.Ok();
     }
 
-    public Result<Guid> Excluir(Guid id)
+    public Result Excluir(Guid id)
     {
+        bool conseguiuExcluir = repositorioTarefa.Excluir(id);
+
+        if (!conseguiuExcluir)
+            return Result.Fail("Não foi possível excluir a tarefa.");
+
         return Result.Ok();
     }
+
 
     public Result<TarefaDto> SelecionarPorId(Guid id)
     {
