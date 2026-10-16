@@ -24,5 +24,19 @@ public sealed class TarefaConfiguration : IEntityTypeConfiguration<Tarefa>
         builder.Property(t => t.DataCriacao)
             .HasColumnType("date")
             .IsRequired();
+
+        builder.Property(t => t.DataConclusao)
+            .HasColumnType("date");
+
+        builder.Property(t => t.PercentualConcluido)
+            .IsRequired();
+
+        builder.Property(t => t.Concluida)
+            .IsRequired();
+
+        builder.HasMany(t => t.Itens) //uma tarefa tem vários itens
+            .WithOne(i => i.Tarefa)  //um item tem apenas uma tarefa
+            .HasForeignKey(i => i.TarefaId)
+            .OnDelete(DeleteBehavior.ClientCascade);
     }
 }
