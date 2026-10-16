@@ -57,6 +57,18 @@ public sealed class ServicoTarefa(IRepositorioTarefa repositorioTarefa)
         return Result.Ok();
     }
 
+    public Result AdicionarItem(AdicionarItemTarefaDto dto)
+    {
+        return Result.Ok();
+    }
+    public Result AlterarConclusaoItem(AlterarConclusaoItemTarefaDto dto)
+    {
+        return Result.Ok();
+    }
+    public Result RemoverItem(RemoverItemTarefaDto dto)
+    {
+        return Result.Ok();
+    }
 
     public Result<TarefaDto> SelecionarPorId(Guid id)
     {
@@ -69,7 +81,11 @@ public sealed class ServicoTarefa(IRepositorioTarefa repositorioTarefa)
             tarefa.Id,
             tarefa.Titulo,
             tarefa.Prioridade,
-            tarefa.DataCriacao
+            tarefa.DataCriacao,
+            tarefa.DataConclusao,
+            tarefa.PercentualConcluido,
+            tarefa.Concluida,
+            tarefa.Itens.Select(i => new ItemTarefaDto(i.Id, i.Titulo, i.Concluido)).ToList()
         );
 
         return Result.Ok(dto);
@@ -78,7 +94,15 @@ public sealed class ServicoTarefa(IRepositorioTarefa repositorioTarefa)
     {
         return repositorioTarefa
             .SelecionarTodos()
-            .Select(t => new TarefaDto(t.Id, t.Titulo, t.Prioridade, t.DataCriacao))
-            .ToList();
+            .Select(t => new TarefaDto(
+                t.Id,
+                t.Titulo,
+                t.Prioridade,
+                t.DataCriacao,
+                t.DataConclusao,
+                t.PercentualConcluido,
+                t.Concluida,
+                t.Itens.Select(i => new ItemTarefaDto(i.Id, i.Titulo, i.Concluido)).ToList())
+            ).ToList();
     }
 }
