@@ -174,4 +174,47 @@ public sealed class TarefaController(ServicoTarefa servicoTarefa) : Controller
         return View(viewModel);
     }
 
+    [HttpPost]
+    public ActionResult AdicionarItem(AdicionarItemTarefaViewModel viewModel)
+    {
+        AdicionarItemTarefaDto dto = new(viewModel.TarefaId, viewModel.Titulo);
+
+        Result resultado = servicoTarefa.AdicionarItem(dto);
+
+        if (resultado.IsFailed)
+            TempData["MensagemErro"] = resultado.Errors.First().Message;
+
+        return RedirectToAction(nameof(GerenciarItens), new { tarefaId = viewModel.TarefaId });
+
+    }
+
+    [HttpPost]
+    public ActionResult AlterarConclusaoItem(Guid tarefaId, Guid itemId, bool concluido)
+    {
+        AlterarConclusaoItemTarefaDto dto = new(
+            tarefaId,
+            itemId, concluido
+        );
+
+        Result resultado = servicoTarefa.AlterarConclusaoItem(dto);
+
+        if (resultado.IsFailed)
+            TempData["MensagemErro"] = resultado.Errors.First().Message;
+
+        return RedirectToAction(nameof(GerenciarItens), new { tarefaId });
+
+    }
+
+    [HttpPost]
+    public ActionResult RemoverItem(Guid tarefaId, Guid itemId)
+    {
+        RemoverItemTarefaDto dto = new(tarefaId, itemId);
+
+        Result resultado = servicoTarefa.RemoverItem(dto);
+
+        if (resultado.IsFailed)
+            TempData["MensagemErro"] = resultado.Errors.First().Message;
+
+        return RedirectToAction(nameof(GerenciarItens), new { tarefaId });
+    }
 }

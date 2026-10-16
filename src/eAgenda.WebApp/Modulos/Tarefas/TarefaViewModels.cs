@@ -37,9 +37,17 @@ public record GerenciarItensTarefaViewModel(
 );
 
 [ValidateNever]
+public record AdicionarItemTarefaViewModel(
+    Guid TarefaId,
+    string Titulo
+);
+
+[ValidateNever]
 public record ItemTarefaViewModel(
     Guid Id,
     string Titulo,
     bool Concluido
 );
+
+
 
