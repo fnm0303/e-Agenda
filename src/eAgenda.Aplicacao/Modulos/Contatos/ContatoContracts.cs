@@ -4,7 +4,9 @@ public record ContatoDto(
     Guid Id,
     string Nome,
     string Email,
-    string Telefone
+    string Telefone,
+    string Cargo,
+    string Empresa
 );
 public record CadastrarContatoDto(
     string Nome,

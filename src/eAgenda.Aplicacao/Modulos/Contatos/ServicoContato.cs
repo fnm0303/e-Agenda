@@ -86,7 +86,7 @@ public sealed class ServicoContato(IRepositorioContato repositorioContato)
         if (contato == null)
             return Result.Fail("Contato não encontrado");
 
-        ContatoDto dto = new(contato.Id, contato.Nome, contato.Email, contato.Telefone);
+        ContatoDto dto = new(contato.Id, contato.Nome, contato.Email, contato.Telefone, contato.Cargo, contato.Empresa);
 
         return Result.Ok(dto);
     }
@@ -99,7 +99,9 @@ public sealed class ServicoContato(IRepositorioContato repositorioContato)
                 c.Id,
                 c.Nome,
                 c.Email,
-                c.Telefone
+                c.Telefone,
+                c.Cargo,
+                c.Empresa
             )).ToList();
     }
 
