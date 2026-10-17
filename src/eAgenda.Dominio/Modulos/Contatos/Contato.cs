@@ -31,9 +31,8 @@ public sealed class Contato : EntidadeBase<Contato>
 
         string telefoneRegex = @"^\(\d{2}\)\s?\d{4,5}-\d{4}$";
         if (string.IsNullOrWhiteSpace(Telefone) || !Regex.IsMatch(Telefone, telefoneRegex))
-        {
             erros.Add(new ErroValidacao { Campo = nameof(Telefone), Mensagem = "O campo \"Telefone\" deve estar no formato (XX) XXXXX-XXXX ou (XX) XXXX-XXXX." });
-        }
+
 
         return erros;
     }

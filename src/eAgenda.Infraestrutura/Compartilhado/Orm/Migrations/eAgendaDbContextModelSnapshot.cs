@@ -55,6 +55,47 @@ namespace eAgenda.Infraestrutura.Compartilhado.Orm.Migrations
                     b.ToTable("TBCategorias", (string)null);
                 });
 
+            modelBuilder.Entity("eAgenda.Dominio.Modulos.Contatos.Contato", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Cargo")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Empresa")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Telefone")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Telefone")
+                        .IsUnique();
+
+                    b.ToTable("TBContatos", (string)null);
+                });
+
             modelBuilder.Entity("eAgenda.Dominio.Modulos.Despesas.Despesa", b =>
                 {
                     b.Property<Guid>("Id")
