@@ -9,7 +9,20 @@ public sealed class ServicoCompromisso(IRepositorioCompromisso repositorioCompro
 {
     public Result<Guid> Cadastrar(CadastrarCompromissoDto dto)
     {
-        Compromisso compromisso = new Compromisso(dto.Assunto, dto.DataOcorrencia, dto.HoraInicio, dto.HoraTermino, dto.TipoCompromisso, dto.LinkOuLocal, dto.Contatos);
+        List<Contato> contatosSelecionados = repositorioContato
+            .SelecionarTodos()
+            .Where(c => dto.ContatosIds.Contains(c.Id))
+            .ToList();
+
+        Compromisso compromisso = new(
+            dto.Assunto,
+            dto.DataOcorrencia,
+            dto.HoraInicio,
+            dto.HoraTermino,
+            dto.TipoCompromisso,
+            dto.LinkOuLocal,
+            contatosSelecionados
+        );
 
         List<ErroValidacao> erros = compromisso.Validar();
 
@@ -37,7 +50,21 @@ public sealed class ServicoCompromisso(IRepositorioCompromisso repositorioCompro
 
     public Result Editar(EditarCompromissoDto dto)
     {
-        Compromisso compromissoAtualizado = new Compromisso(dto.Assunto, dto.DataOcorrencia, dto.HoraInicio, dto.HoraTermino, dto.TipoCompromisso, dto.LinkOuLocal, dto.Contatos);
+        List<Contato> contatosSelecionados = repositorioContato
+            .SelecionarTodos()
+            .Where(c => dto.ContatosIds.Contains(c.Id))
+            .ToList();
+
+        Compromisso compromissoAtualizado = new(
+            dto.Assunto,
+            dto.DataOcorrencia,
+            dto.HoraInicio,
+            dto.HoraTermino,
+            dto.TipoCompromisso,
+            dto.LinkOuLocal,
+            contatosSelecionados
+        );
+
 
         List<ErroValidacao> erros = compromissoAtualizado.Validar();
 

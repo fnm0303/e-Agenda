@@ -21,7 +21,7 @@ public record CadastrarCompromissoDto(
     TimeOnly HoraTermino,
     TipoCompromisso TipoCompromisso,
     string LinkOuLocal,
-    List<Contato> Contatos
+    List<Guid> ContatosIds
 );
 
 public record EditarCompromissoDto(
@@ -32,6 +32,6 @@ public record EditarCompromissoDto(
     TimeOnly HoraTermino,
     TipoCompromisso TipoCompromisso,
     string LinkOuLocal,
-    List<Contato> Contatos
+    List<Guid> ContatosIds
 );
 

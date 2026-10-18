@@ -1,0 +1,90 @@
+@using eAgenda.Aplicacao.Modulos.Compromissos
+
+@{
+    Layout = "_Layout";
+    ViewBag.Titulo = "Listagem de Compromissos";
+}
+
+@model List<CompromissoDto>
+
+<a class="btn btn-outline-primary rounded-pill px-4 mb-3" asp-action="Cadastrar">Cadastrar Novo</a>
+
+@if (!string.IsNullOrWhiteSpace(TempData["MensagemErro"]?.ToString()))
+{
+    <div class="alert alert-danger border-start border-danger border-4 rounded-3" role="alert">
+        @TempData["MensagemErro"]!.ToString()
+    </div>
+}
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-primary border-start border-primary border-4 rounded-3" role="alert">
+        Nenhum compromisso cadastrado.
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-2">
+        @foreach (CompromissoDto c in Model)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                            <span class="badge text-bg-primary rounded-pill">@c.Id.ToString("N")[..8]</span>
+                        </div>
+
+                        <dl class="row g-2 mb-4">
+                            <dt class="col-5 text-secondary fw-semibold">Assunto</dt>
+                            <dd class="col-7 mb-0">@c.Assunto</dd>
+
+                            <dt class="col-5 text-secondary fw-semibold">Data da Ocorrência</dt>
+                            <dd class="col-7 mb-0">@c.DataOcorrencia</dd>
+
+                            <dt class="col-5 text-secondary fw-semibold">Hora de início</dt>
+                            <dd class="col-7 mb-0">@c.HoraInicio</dd>
+
+                            <dt class="col-5 text-secondary fw-semibold">Hora de término</dt>
+                            <dd class="col-7 mb-0">@c.HoraTermino</dd>
+
+                            <dt class="col-5 text-secondary fw-semibold">Tipo de Compromisso</dt>
+                            <dd class="col-7 mb-0">@c.TipoCompromisso</dd>
+
+                            <dt class="col-5 text-secondary fw-semibold">Link ou Local</dt>
+                            <dd class="col-7 mb-0">
+                                @if (Uri.IsWellFormedUriString(c.LinkOuLocal, UriKind.Absolute))
+                                {
+                                    <a href="@c.LinkOuLocal" target="_blank" class="text-decoration-none">Acessar Link <i
+                                        class="bi bi-box-arrow-up-right"></i></a>
+                                    }
+                                else
+                                    {
+                                        @c.LinkOuLocal
+                                    }
+                                </dd>
+                                
+                                <dt class="col-5 text-secondary fw-semibold">Contato</dt>
+                                <dd class="col-7 mb-0">
+                                    @if (c.Contatos != null && c.Contatos.Count > 0)
+                                    {
+                                        @string.Join(", ", c.Contatos.Select(ct => ct.Nome))
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted fst-italic">Nenhum contato</span>
+                                    }
+                                </dd>
+                            </dl>
+
+                            <div class="d-flex flex-wrap gap-2 mt-auto justify-content-end">
+                                <a class="btn btn-outline-primary btn-sm rounded-pill px-3" asp-action="Editar"
+                                   asp-route-id="@c.Id">Editar</a>
+                                <a class="btn btn-outline-primary btn-sm rounded-pill px-3" asp-action="Excluir"
+                                   asp-route-id="@c.Id">Excluir</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }

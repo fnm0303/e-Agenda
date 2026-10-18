@@ -1,0 +1,94 @@
+@using eAgenda.Aplicacao.Modulos.Contatos
+@using eAgenda.WebApp.Modulos.Compromissos
+@{
+    Layout = "_Layout";
+    ViewBag.Titulo = "Cadastro de Compromisso";
+    var contatosDisponiveis = ViewBag.Contatos as List<ContatoDto> ?? new List<ContatoDto>();
+}
+
+@model CadastrarCompromissoViewModel
+
+<form class="card border-primary-subtle shadow-sm mx-auto p-4" style="max-width: 620px;" asp-action="Cadastrar"
+      method="post">
+    <div class="mb-3">
+        <label asp-for="Assunto" class="form-label fw-semibold text-primary text-uppercase small">Assunto</label>
+        <input asp-for="Assunto" type="text" class="form-control">
+        <span asp-validation-for="Assunto" class="text-danger small fw-semibold"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DataOcorrencia" class="form-label fw-semibold text-primary text-uppercase small">Data de
+            Ocorrência</label>
+            <input asp-for="DataOcorrencia" type="date" class="form-control">
+            <span asp-validation-for="DataOcorrencia" class="text-danger small fw-semibold"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="HoraInicio" class="form-label fw-semibold text-primary text-uppercase small">Hora de
+                início</label>
+                <input asp-for="HoraInicio" type="time" class="form-control">
+                <span asp-validation-for="HoraInicio" class="text-danger small fw-semibold"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="HoraTermino" class="form-label fw-semibold text-primary text-uppercase small">Hora de
+                    término</label>
+                    <input asp-for="HoraTermino" type="time" class="form-control">
+                    <span asp-validation-for="HoraTermino" class="text-danger small fw-semibold"></span>
+                </div>
+        
+                <div class="mb-3">
+                    <label asp-for="TipoCompromisso" class="form-label fw-semibold text-primary text-uppercase small">Tipo de
+                        compromisso</label>
+                        <select asp-for="TipoCompromisso" id="selectTipoCompromisso" class="form-select">
+                            <option value="Remoto">Remoto</option>
+                            <option value="Presencial">Presencial</option>
+                        </select>
+                        <span asp-validation-for="TipoCompromisso" class="text-danger small fw-semibold"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label id="labelLinkOuLocal" asp-for="LinkOuLocal"
+                               class="form-label fw-semibold text-primary text-uppercase small">Link ou Local</label>
+                        <input asp-for="LinkOuLocal" id="inputLinkOuLocal" type="text" class="form-control">
+                        <span asp-validation-for="LinkOuLocal" class="text-danger small fw-semibold"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-primary text-uppercase small">Contatos (Opcional)</label>
+                        <select asp-for="ContatosSelecionados" class="form-select" multiple size="4">
+                            @foreach (var contato in contatosDisponiveis)
+                            {
+                                <option value="@contato.Id">@contato.Nome</option>
+                            }
+                        </select>
+                        <div class="form-text small">Segure <code>Ctrl</code> para selecionar mais de um contato.</div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <a class="btn btn-outline-primary rounded-pill px-4" asp-action="Listar">Voltar</a>
+                        <button class="btn btn-primary rounded-pill px-4" type="submit">Confirmar</button>
+                    </div>
+                </form>
+            
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                    const selectTipo = document.getElementById("selectTipoCompromisso");
+                    const label = document.getElementById("labelLinkOuLocal");
+                    const input = document.getElementById("inputLinkOuLocal");
+
+                    if (selectTipo && label && input) {
+                    function atualizarCampo() {
+                    if (selectTipo.value === "Remoto") {
+                    label.textContent = "Link da Reunião";
+                    input.placeholder = "https://meet.google.com/...";
+                    } else {
+                    label.textContent = "Local do Compromisso";
+                    input.placeholder = "Endereço ou Sala de Reunião";
+                    }
+                    }
+
+                    selectTipo.addEventListener("change", atualizarCampo);
+                    atualizarCampo();
+                    }
+                    });
