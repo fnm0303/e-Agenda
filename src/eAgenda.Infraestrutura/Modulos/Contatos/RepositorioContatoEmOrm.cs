@@ -1,3 +1,4 @@
+using eAgenda.Dominio.Modulos.Compromissos;
 using eAgenda.Dominio.Modulos.Contatos;
 using eAgenda.Infraestrutura.Compartilhado.Orm;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,6 @@ public sealed class RepositorioContatoEmOrm(eAgendaDbContext dbContext) : Reposi
     public override Contato? SelecionarPorId(Guid idSelecionado)
     {
         Contato? contato = registros
-            //.Include(c => c.Compromissos)
             .SingleOrDefault(t => t.Id == idSelecionado);
 
         return contato;
@@ -19,7 +19,6 @@ public sealed class RepositorioContatoEmOrm(eAgendaDbContext dbContext) : Reposi
     {
         List<Contato> contatos = registros
             .OrderBy(c => c.Nome)
-            //.Include(c => c.Compromissos)
             .ToList();
 
         return contatos;
@@ -34,5 +33,11 @@ public sealed class RepositorioContatoEmOrm(eAgendaDbContext dbContext) : Reposi
     public bool ExisteTelefone(string telefone, Guid? idAtual = null)
     {
         return registros.Any(c => c.Telefone == telefone && (!idAtual.HasValue || c.Id != idAtual.Value));
+    }
+
+    public bool PossuiCompromissosVinculados(Guid id)
+    {
+        return dbContext.Set<Compromisso>().Any(c => c.Contatos.Any(contato => contato.Id == id));
+
     }
 }

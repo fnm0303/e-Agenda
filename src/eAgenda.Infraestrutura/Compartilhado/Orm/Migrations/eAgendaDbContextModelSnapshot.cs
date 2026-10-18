@@ -22,6 +22,21 @@ namespace eAgenda.Infraestrutura.Compartilhado.Orm.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CompromissoContato", b =>
+                {
+                    b.Property<Guid>("CompromissoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ContatosId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CompromissoId", "ContatosId");
+
+                    b.HasIndex("ContatosId");
+
+                    b.ToTable("TBCompromissos_Contato", (string)null);
+                });
+
             modelBuilder.Entity("TBDespesasCategorias", b =>
                 {
                     b.Property<Guid>("CategoriasId")
@@ -53,6 +68,38 @@ namespace eAgenda.Infraestrutura.Compartilhado.Orm.Migrations
                         .IsUnique();
 
                     b.ToTable("TBCategorias", (string)null);
+                });
+
+            modelBuilder.Entity("eAgenda.Dominio.Modulos.Compromissos.Compromisso", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Assunto")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateOnly>("DataOcorrencia")
+                        .HasColumnType("date");
+
+                    b.Property<TimeOnly>("HoraInicio")
+                        .HasColumnType("time");
+
+                    b.Property<TimeOnly>("HoraTermino")
+                        .HasColumnType("time");
+
+                    b.Property<string>("LinkOuLocal")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TipoCompromisso")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TBCompromissos", (string)null);
                 });
 
             modelBuilder.Entity("eAgenda.Dominio.Modulos.Contatos.Contato", b =>
@@ -173,6 +220,21 @@ namespace eAgenda.Infraestrutura.Compartilhado.Orm.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TBTarefas", (string)null);
+                });
+
+            modelBuilder.Entity("CompromissoContato", b =>
+                {
+                    b.HasOne("eAgenda.Dominio.Modulos.Compromissos.Compromisso", null)
+                        .WithMany()
+                        .HasForeignKey("CompromissoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("eAgenda.Dominio.Modulos.Contatos.Contato", null)
+                        .WithMany()
+                        .HasForeignKey("ContatosId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TBDespesasCategorias", b =>

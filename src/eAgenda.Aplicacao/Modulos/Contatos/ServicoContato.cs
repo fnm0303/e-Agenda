@@ -71,6 +71,9 @@ public sealed class ServicoContato(IRepositorioContato repositorioContato)
 
     public Result Excluir(Guid id)
     {
+        if (repositorioContato.PossuiCompromissosVinculados(id))
+            return Result.Fail("Não é possível excluir este contato pois ele está vinculado a um ou mais compromissos.");
+
         bool conseguiuExcluir = repositorioContato.Excluir(id);
 
         if (!conseguiuExcluir)
