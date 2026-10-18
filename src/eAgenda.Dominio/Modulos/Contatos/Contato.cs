@@ -33,7 +33,6 @@ public sealed class Contato : EntidadeBase<Contato>
         if (string.IsNullOrWhiteSpace(Telefone) || !Regex.IsMatch(Telefone, telefoneRegex))
             erros.Add(new ErroValidacao { Campo = nameof(Telefone), Mensagem = "O campo \"Telefone\" deve estar no formato (XX) XXXXX-XXXX ou (XX) XXXX-XXXX." });
 
-
         return erros;
     }
 
